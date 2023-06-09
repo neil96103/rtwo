@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:rtwo/initialization/identity.dart';
 
+import 'n_identity.dart';
 
 final List<String> imageList = [
   "assets/images/ikea_shortcut.png",
@@ -32,13 +32,13 @@ class _StartPageState extends State<StartPage> {
         body: Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 14, 14, 15),
-                  Color.fromARGB(255, 52, 54, 70)
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              )),
+            colors: [
+              Color.fromARGB(255, 14, 14, 15),
+              Color.fromARGB(255, 52, 54, 70)
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          )),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
@@ -66,74 +66,74 @@ class _StartPageState extends State<StartPage> {
                   height: 50,
                 ),
                 //ikea廣告跑馬燈
-            SizedBox(
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    child: CarouselSlider.builder(
-                      itemCount: imageList.length,
-                      options: CarouselOptions(
-                          enlargeCenterPage: true,
-                          height: 200,
-                          autoPlay: true,
-                          autoPlayInterval: const Duration(seconds: 5),
-                          reverse: false,
-                          aspectRatio: 5.0,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              imageIndex = index;
-                            });
-                          }),
-                      itemBuilder: (context, i, id) {
-                        return Container(
-                            width: 600,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                color: Colors.white),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: Image(
-                                image: AssetImage(imageList[i]),
-                                fit: BoxFit.cover,
-                              ),
-                            ));
-                      },
-                    ),
+                SizedBox(
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: CarouselSlider.builder(
+                          itemCount: imageList.length,
+                          options: CarouselOptions(
+                              enlargeCenterPage: true,
+                              height: 200,
+                              autoPlay: true,
+                              autoPlayInterval: const Duration(seconds: 5),
+                              reverse: false,
+                              aspectRatio: 5.0,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  imageIndex = index;
+                                });
+                              }),
+                          itemBuilder: (context, i, id) {
+                            return Container(
+                                width: 600,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    color: Colors.white),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Image(
+                                    image: AssetImage(imageList[i]),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ));
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(textList[imageIndex],
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white70)),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(textList[imageIndex],
-                      style: const TextStyle(fontSize: 16, color: Colors.white70)),
-                ],
-              ),
-            ),
+                ),
                 Padding(
-                    padding:const EdgeInsets.fromLTRB(20, 80, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 80, 20, 0),
                     child: SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor:
-                              const Color.fromRGBO(0, 240, 255, 0.65),
+                                  const Color.fromRGBO(0, 240, 255, 0.65),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15.0))),
                           onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => identity()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => identity()));
                           },
                           child: const Text("開始使用",
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500,
-                                  letterSpacing: 1.5)
-                          )
-                      ),
-                    )
-                ),
+                                  letterSpacing: 1.5))),
+                    )),
                 /*
             Container(
               height: 100,
@@ -150,4 +150,3 @@ class _StartPageState extends State<StartPage> {
         ));
   }
 }
-

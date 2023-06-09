@@ -2,6 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 
+final TextEditingController tf_TeacherID = TextEditingController();
+final TextEditingController tf_TeacherName = TextEditingController();
+final TextEditingController tf_TeacherPassword = TextEditingController();
+
+var _check = false; //判斷登入按鈕是否被點擊
+
 class identity extends StatefulWidget {
   const identity({super.key});
 
@@ -94,9 +100,6 @@ class identityStudent extends StatefulWidget {
 }
 
 class _identityStudentState extends State<identityStudent> {
-  final TextEditingController tf_TeacherID = TextEditingController();
-  final TextEditingController tf_TeacherName = TextEditingController();
-  final TextEditingController tf_TeacherPassword = TextEditingController();
   var _check = false; //判斷登入按鈕是否被點擊
   @override
   Widget build(BuildContext context) {
@@ -137,7 +140,7 @@ class _identityStudentState extends State<identityStudent> {
           const Padding(padding: EdgeInsets.all(5)),
           //觸發顯示登入/註冊介面
           _check
-              ? showLoginUI(tf_TeacherID.text, "student")
+              ? showLoginUI(tf_TeacherID, "student")
               : const Padding(padding: EdgeInsets.zero),
         ],
       ),
@@ -227,7 +230,7 @@ Widget showLoginUI(var documentId, String position) {
   final TextEditingController password = TextEditingController();
   CollectionReference users = FirebaseFirestore.instance.collection('student');
   return FutureBuilder<DocumentSnapshot>(
-    future: users.doc(documentId).get(),
+    future: users.doc(documentId.text).get(),
     builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
       //其他問題(沒開網路)
       if (snapshot.hasError) {
@@ -258,7 +261,7 @@ Widget showLoginUI(var documentId, String position) {
 
                   FirebaseFirestore.instance
                       .collection(position)
-                      .doc(documentId)
+                      .doc(documentId.text)
                       .set(userdata)
                       .onError((e, _) => print("Error writing document: $e"));
                 }),
