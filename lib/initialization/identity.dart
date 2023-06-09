@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../student/student.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
-
-import '../teacher/teacher.dart';
 
 class identity extends StatefulWidget {
   const identity({super.key});
@@ -19,6 +16,7 @@ class _identityState extends State<identity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -57,7 +55,9 @@ class _identityState extends State<identity> {
                 borderRadius: 15,
                 height: 50,
                 selectedIndex: _tabTextIndexSelected,
-                selectedBackgroundColors: const [Color.fromRGBO(0, 178, 239, 0.85)],
+                selectedBackgroundColors: const [
+                  Color.fromRGBO(0, 178, 239, 0.85)
+                ],
                 selectedTextStyle: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -79,126 +79,91 @@ class _identityState extends State<identity> {
               ),
               _tabTextIndexSelected == 0
                   ? identityStudent()
-                  : _identityTeacher(),
+                  : identityTeacher(),
             ],
           )),
     );
   }
 }
+
 class identityStudent extends StatefulWidget {
   const identityStudent({super.key});
 
   @override
   State<identityStudent> createState() => _identityStudentState();
 }
-class _identityStudentState extends State<identityStudent>{
 
+class _identityStudentState extends State<identityStudent> {
   final TextEditingController tf_TeacherID = TextEditingController();
   final TextEditingController tf_TeacherName = TextEditingController();
   final TextEditingController tf_TeacherPassword = TextEditingController();
-  var _check = false;  //判斷登入按鈕是否被點擊
-
-  Widget showLoginUI(var documentId){
-    CollectionReference users = FirebaseFirestore.instance.collection('student');
-    return FutureBuilder<DocumentSnapshot>(
-      future: users.doc(documentId).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        //其他問題(沒開網路)
-        if (snapshot.hasError) {
-          return Text("Something went wrong");
-        }
-        //註冊
-        if (snapshot.hasData && !snapshot.data!.exists) {
-          return Text("Document does not exist");
-        }
-        //登入
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-          var password = data['password'];
-          return Padding(
-              padding: const EdgeInsets.fromLTRB(20,10,20,0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "密碼",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                      width: 1,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  suffixIcon: Container(
-                    margin: const EdgeInsets.all(8),
-                    child: IconButton(
-                        icon: const Icon(Icons.arrow_circle_right),
-                        iconSize: 30,
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Teacher()));
-                        }),
-                  ),
-                ),
-              ));
-        }
-        return Text("loading");
-      },
-    );
-  }
+  var _check = false; //判斷登入按鈕是否被點擊
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: TextField(
-              controller: tf_TeacherID,
-              decoration: InputDecoration(
-                hintText: "學生編號",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(
-                    color: Colors.black,
-                    width: 1,
-                    style: BorderStyle.solid,
-                  ),
+    return SingleChildScrollView(
+        child: Padding(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          TextField(
+            controller: tf_TeacherID,
+            decoration: InputDecoration(
+              hintText: "學生編號",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                  style: BorderStyle.solid,
                 ),
-                suffixIcon: Container(
-                  margin: EdgeInsets.all(8),
-                  child: IconButton(
+              ),
+              suffixIcon: !_check
+                  ? IconButton(
                       icon: const Icon(Icons.arrow_circle_right),
                       iconSize: 30,
                       onPressed: () {
                         //Navigator.push(context, MaterialPageRoute(builder: (context) => Teacher()));
                         setState(() {
-                          if(tf_TeacherID.text.isEmpty){
+                          if (tf_TeacherID.text.isEmpty) {
                             _check = false;
-                          }else{
+                          } else {
                             _check = true;
                           }
                         });
-                      }),
-                ),
-              ),
-            )),
-        //觸發顯示登入/註冊介面
-        _check?showLoginUI(tf_TeacherID.text):Padding(padding: EdgeInsets.zero),
-      ],
-    );
+                      })
+                  : null,
+            ),
+          ),
+          const Padding(padding: EdgeInsets.all(5)),
+          //觸發顯示登入/註冊介面
+          _check
+              ? showLoginUI(tf_TeacherID.text, "student")
+              : const Padding(padding: EdgeInsets.zero),
+        ],
+      ),
+    ));
   }
 }
 
-class _identityTeacher extends StatelessWidget {
+class identityTeacher extends StatefulWidget {
+  const identityTeacher({super.key});
+
+  @override
+  State<identityTeacher> createState() => _identityTeacherState();
+}
+
+class _identityTeacherState extends State<identityTeacher> {
   final TextEditingController tf_StudentID = TextEditingController();
   final TextEditingController tf_StudentName = TextEditingController();
+
+  var _check = false; //判斷登入按鈕是否被點擊
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.all(20),
             child: TextField(
               decoration: InputDecoration(
                 hintText: "老師編號",
@@ -216,14 +181,119 @@ class _identityTeacher extends StatelessWidget {
                       icon: const Icon(Icons.arrow_circle_right),
                       iconSize: 30,
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Teacher()));
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => Teacher()));
+                        setState(() {
+                          if (tf_StudentID.text.isEmpty) {
+                            _check = false;
+                          } else {
+                            _check = true;
+                          }
+                        });
                       }),
                 ),
               ),
-            ))
+            )),
+        //觸發顯示登入/註冊介面
+        _check
+            ? showLoginUI(tf_StudentID.text, "student")
+            : Padding(padding: EdgeInsets.zero),
       ],
     );
   }
 }
 
+Future<String> firebase_login(String documentId, String position) async {
+  try {
+    var documentSnapshot = await FirebaseFirestore.instance
+        .collection(position)
+        .doc(documentId)
+        .get();
+    if (documentSnapshot.exists) {
+      var data = documentSnapshot.data();
+      if (data != null && data.containsKey("password")) {
+        return data["password"].toString();
+      } else {
+        return "no data";
+      }
+    } else {
+      return "no account";
+    }
+  } catch (e) {
+    return "other error";
+  }
+}
+
+Widget showLoginUI(var documentId, String position) {
+  final TextEditingController password = TextEditingController();
+  CollectionReference users = FirebaseFirestore.instance.collection('student');
+  return FutureBuilder<DocumentSnapshot>(
+    future: users.doc(documentId).get(),
+    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+      //其他問題(沒開網路)
+      if (snapshot.hasError) {
+        return const Text("出現其他問題，請稍後再試");
+      }
+      //註冊
+      if (snapshot.hasData && !snapshot.data!.exists) {
+        return TextField(
+          controller: password,
+          decoration: InputDecoration(
+            hintText: "密碼",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Colors.black,
+                width: 1,
+                style: BorderStyle.solid,
+              ),
+            ),
+            suffixIcon: IconButton(
+                icon: const Icon(Icons.arrow_circle_right),
+                iconSize: 30,
+                onPressed: () {
+                  print("sad");
+                  var userdata = {
+                    "password": password.text,
+                  };
+
+                  FirebaseFirestore.instance
+                      .collection(position)
+                      .doc(documentId)
+                      .set(userdata)
+                      .onError((e, _) => print("Error writing document: $e"));
+                }),
+          ),
+        );
+      }
+      //登入
+      if (snapshot.connectionState == ConnectionState.done) {
+        Map<String, dynamic> data =
+            snapshot.data!.data() as Map<String, dynamic>;
+
+        return TextField(
+          controller: password,
+          decoration: InputDecoration(
+            hintText: "密碼",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Colors.black,
+                width: 1,
+                style: BorderStyle.solid,
+              ),
+            ),
+            suffixIcon: IconButton(
+                icon: const Icon(Icons.arrow_circle_right),
+                iconSize: 30,
+                onPressed: () {
+                  print(data['password']);
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (context) => Teacher()));
+                }),
+          ),
+        );
+      }
+      return const Text("檢查中");
+    },
+  );
+}
