@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:rtwo/student/student.dart';
 
+import '../firebase/custom_firebase.dart';
 import '../teacher/teacher.dart';
 
 final TextEditingController tf_ID = TextEditingController();
@@ -223,7 +224,11 @@ class _identityState extends State<identity> {
                                                     builder: (context) =>
                                                         (_tabTextIndexSelected ==
                                                                 0
-                                                            ? const Student()
+                                                            ? Student(
+                                                                student_type: [
+                                                                  tf_ID.text
+                                                                ],
+                                                              )
                                                             : const Teacher())));
                                           }))
                                         : (tf_Password.text == Password
@@ -233,7 +238,11 @@ class _identityState extends State<identity> {
                                                     builder: (context) =>
                                                         (_tabTextIndexSelected ==
                                                                 0
-                                                            ? const Student()
+                                                            ? Student(
+                                                                student_type: [
+                                                                  tf_ID.text
+                                                                ],
+                                                              )
                                                             : const Teacher())))
                                             : null);
                                   }),
@@ -248,26 +257,5 @@ class _identityState extends State<identity> {
             ],
           )),
     );
-  }
-}
-
-Future<String> firebase_login(String documentId, String position) async {
-  try {
-    var documentSnapshot = await FirebaseFirestore.instance
-        .collection(position)
-        .doc(documentId)
-        .get();
-    if (documentSnapshot.exists) {
-      var data = documentSnapshot.data();
-      if (data != null && data.containsKey("password")) {
-        return data["password"].toString();
-      } else {
-        return "no";
-      }
-    } else {
-      return "no";
-    }
-  } catch (e) {
-    return "no";
   }
 }
