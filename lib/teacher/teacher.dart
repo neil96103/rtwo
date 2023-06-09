@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../firebase/custom_firebase.dart';
 import 'class.dart';
 
 var user = ["老師Ａ", "male", "12345"];
+// var user = [];
 
 // 老師設定頁面
 class teacher_setting extends StatefulWidget {
@@ -23,50 +25,24 @@ class _teacher_settingState extends State<teacher_setting> {
         height: 600,
         child: Column(
           children: [
-            Column(
-              children: [
-                SizedBox(
-                  width: 300,
-                  child: TextField(
-                    decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.school),
-                        hintText: "暱稱",
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        )),
-                    controller: tf_TeacherName,
-                    keyboardType: TextInputType.text,
-                    onChanged: (String value) {
-                      print("${value}");
-                    },
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                SizedBox(
-                  width: 300,
-                  child: TextField(
-                    decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.picture_in_picture_sharp),
-                        hintText: "教師編號",
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        )),
-                    controller: tf_TeacherID,
-                    keyboardType: TextInputType.text,
-                    onChanged: (String value) {
-                      print("${value}");
-                    },
-                  ),
-                ),
-              ],
+            SizedBox(
+              width: 300,
+              child: TextField(
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.school),
+                    hintText: "暱稱",
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                    )),
+                controller: tf_TeacherName,
+                keyboardType: TextInputType.text,
+                onChanged: (String value) {
+                  print("${value}");
+                },
+              ),
             ),
             const Padding(
               padding: EdgeInsets.all(10),
@@ -188,13 +164,17 @@ class _teacher_settingState extends State<teacher_setting> {
 
 //老師首頁
 class Teacher extends StatefulWidget {
-  const Teacher({super.key});
+  final List teacher_type;
+  const Teacher({super.key, required this.teacher_type});
 
   @override
-  State<Teacher> createState() => _TeacherState();
+  State<Teacher> createState() => _TeacherState(teacher_type: teacher_type);
 }
 
 class _TeacherState extends State<Teacher> {
+  final List teacher_type;
+  _TeacherState({required this.teacher_type});
+
   int _counter = 0;
   void _incrementCounter() {
     setState(() {
@@ -289,6 +269,12 @@ class _TeacherState extends State<Teacher> {
 
   @override
   Widget build(BuildContext context) {
+    print(teacher_type);
+    for (var i = 0; i < teacher_type.length; i++) {
+      print(teacher_type[i].toString());
+      user[i] = teacher_type[i].toString();
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
@@ -311,7 +297,7 @@ class _TeacherState extends State<Teacher> {
               SizedBox(
                 width: 400,
                 child: Card(
-                  color: Color.fromARGB(0, 45, 45, 48),
+                  color: const Color.fromARGB(0, 45, 45, 48),
                   elevation: 15.0, //设置阴影
                   shape: const RoundedRectangleBorder(
                       borderRadius:

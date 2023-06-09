@@ -65,7 +65,7 @@ class _StudentState extends State<Student> {
   _StudentState({required this.student_type});
   @override
   Widget build(BuildContext context) {
-    get_student_data(student_type[0]).then((value) => print(value));
+    get_data(student_type[0], "student").then((value) => print(value));
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(

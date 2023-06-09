@@ -203,6 +203,7 @@ class _identityState extends State<identity> {
                                   icon: const Icon(Icons.arrow_circle_right),
                                   iconSize: 30,
                                   onPressed: () {
+                                    var user = [];
                                     var userdata = {
                                       "password": tf_Password.text,
                                       "name": tf_Name.text,
@@ -218,32 +219,66 @@ class _identityState extends State<identity> {
                                             .onError((e, _) => print(
                                                 "Error writing document: $e"))
                                             .then((value) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        (_tabTextIndexSelected ==
-                                                                0
-                                                            ? Student(
-                                                                student_type: [
-                                                                  tf_ID.text
-                                                                ],
-                                                              )
-                                                            : const Teacher())));
+                                            get_data(
+                                                    tf_ID.text,
+                                                    _tabTextIndexSelected == 0
+                                                        ? "student"
+                                                        : "teacher")
+                                                .then((var value) {
+                                              if (value != null) {
+                                                for (var i = 0;
+                                                    i < value.length;
+                                                    i++) {
+                                                  user[i] = value.elementAt(i);
+                                                }
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            (_tabTextIndexSelected ==
+                                                                    0
+                                                                ? Student(
+                                                                    student_type:
+                                                                        user,
+                                                                  )
+                                                                : Teacher(
+                                                                    teacher_type:
+                                                                        user,
+                                                                  ))));
+                                              }
+                                            });
                                           }))
                                         : (tf_Password.text == Password
-                                            ? Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        (_tabTextIndexSelected ==
-                                                                0
-                                                            ? Student(
-                                                                student_type: [
-                                                                  tf_ID.text
-                                                                ],
-                                                              )
-                                                            : const Teacher())))
+                                            ? get_data(
+                                                    tf_ID.text,
+                                                    _tabTextIndexSelected == 0
+                                                        ? "student"
+                                                        : "teacher")
+                                                .then((var value) {
+                                                if (value != null) {
+                                                  for (var i = 0;
+                                                      i < value.length;
+                                                      i++) {
+                                                    user.add(value
+                                                        .elementAt(i)
+                                                        .toString());
+                                                  }
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              (_tabTextIndexSelected ==
+                                                                      0
+                                                                  ? Student(
+                                                                      student_type:
+                                                                          user,
+                                                                    )
+                                                                  : Teacher(
+                                                                      teacher_type:
+                                                                          user,
+                                                                    ))));
+                                                }
+                                              })
                                             : null);
                                   }),
                             ),
