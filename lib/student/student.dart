@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../firebase/custom_firebase.dart';
 import '../teacher/class.dart';
 
 var user = ["學生Ａ", "male", "12345"];
@@ -9,7 +10,7 @@ class Student extends StatefulWidget {
   const Student({super.key, required this.student_type});
 
   @override
-  State<Student> createState() => _StudentState();
+  State<Student> createState() => _StudentState(student_type: student_type);
 }
 
 //學生首頁
@@ -60,8 +61,11 @@ class _StudentState extends State<Student> {
     });
   }
 
+  final List student_type;
+  _StudentState({required this.student_type});
   @override
   Widget build(BuildContext context) {
+    get_student_data(student_type[0]).then((value) => print(value));
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
