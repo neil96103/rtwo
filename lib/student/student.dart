@@ -5,7 +5,8 @@ import '../teacher/class.dart';
 var user = ["學生Ａ", "male", "12345"];
 
 class Student extends StatefulWidget {
-  const Student({super.key});
+  final List student_type;
+  const Student({super.key, required this.student_type});
 
   @override
   State<Student> createState() => _StudentState();
@@ -14,7 +15,7 @@ class Student extends StatefulWidget {
 //學生首頁
 class _StudentState extends State<Student> {
   //生成修課清單
-  courseList(int num){
+  courseList(int num) {
     return List.generate(num, (index) {
       return Column(
         children: [
@@ -25,18 +26,15 @@ class _StudentState extends State<Student> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Class_page(
-                            class_type: [
+                        builder: (context) => Class_page(class_type: [
                               "課堂${200 - (index + 1)}",
                               "$index",
                               "0"
                             ])));
               },
               style: OutlinedButton.styleFrom(
-                foregroundColor:
-                const Color.fromARGB(255, 255, 0, 0),
-                backgroundColor:
-                Color.fromARGB(255, 74, 74, 74),
+                foregroundColor: const Color.fromARGB(255, 255, 0, 0),
+                backgroundColor: Color.fromARGB(255, 74, 74, 74),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
