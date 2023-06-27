@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../firebase/custom_firebase.dart';
 import '../teacher/class.dart';
 
-var user = ["學生Ａ", "male", "12345"];
+var user = ["學生Ａ", "male", "12345", "ID"];
 
 class Student extends StatefulWidget {
   final List student_type;
@@ -65,7 +65,9 @@ class _StudentState extends State<Student> {
   _StudentState({required this.student_type});
   @override
   Widget build(BuildContext context) {
-    get_data(student_type[0], "student").then((value) => print(value));
+    print("asdasdawdwadwad" + student_type[3].toString());
+    get_data(student_type[0], "student")
+        .then((value) => print("ASDASD" + value.toString()));
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(

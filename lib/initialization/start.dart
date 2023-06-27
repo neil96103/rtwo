@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:rtwo/initialization/BMI_identity.dart';
 
 import 'n_identity.dart';
 
@@ -125,7 +126,7 @@ class _StartPageState extends State<StartPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => identity()));
+                                    builder: (context) => BMI_identity()));
                           },
                           child: const Text("開始使用",
                               style: TextStyle(
